@@ -104,5 +104,6 @@ RUN rm -rf /dependencies
 VOLUME [ "/build" ]
 
 # Declare entrypoint and default arguments
+WORKDIR /build
 ENTRYPOINT [ "su", "-c", "/build/tes3mp-deploy.sh", "--cmake-local" ]
 CMD [ "--install", "--make-package", "--skip-pkgs" ]
