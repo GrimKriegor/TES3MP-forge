@@ -3,7 +3,7 @@ FROM debian:jessie
 
 # Assign some labels
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
-LABEL description="A script to simplify the installation, upgrade and packaging of TES3MP"
+LABEL description="A container to simplify the packaging of TES3MP for GNU/Linux "
 
 # Environment variables
 ENV PATH=/usr/local/bin:$PATH
@@ -75,12 +75,13 @@ RUN cd /dependencies && \
     make install
 
 ## QT5
+RUN apt-get -y install libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev
 RUN cd /dependencies && \
     git clone git://code.qt.io/qt/qt5.git && \
     cd qt5 && \
     git checkout 5.5 && \
     ./init-repository && \
-    ./configure -opensource -nomake examples -nomake tests --prefix=/usr/local && \
+    yes | ./configure -opensource -nomake examples -nomake tests --prefix=/usr/local && \
     make && \
     make install
 
