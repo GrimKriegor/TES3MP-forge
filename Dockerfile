@@ -8,13 +8,15 @@ LABEL description="A container to simplify the packaging of TES3MP for GNU/Linux
 # Environment variables
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
+ARG CORES=1
 
 # Edit sources.list to include source and contrib repositories
 RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list
 RUN sed -i "s/ main/ main contrib/g" /etc/apt/sources.list
 
+# Update package lists and install a few useful tools
 RUN apt-get update
-RUN apt-get -y install build-essential lsb-release git wget
+RUN apt-get -y install build-essential git wget
 
 # Create a temporary folder where to build the dependencies
 RUN mkdir /dependencies
@@ -27,7 +29,7 @@ RUN cd /dependencies && \
     tar xvf gcc-6.4.0.tar.gz
 RUN cd /dependencies/gcc-6.4.0 && \
     ./configure --program-suffix=-6 --enable-languages=c,c++ --disable-multilib && \
-    make && \
+    make -j ${CORES} && \
     make install
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/local/bin/g++-6
 
@@ -39,7 +41,7 @@ RUN cd /dependencies && \
     git checkout tags/v3.5.2
 RUN cd /dependencies/cmake && \
     ./configure --prefix=/usr/local && \
-    make && \
+    make -j ${CORES} && \
     make install
 
 ## Boost
@@ -49,7 +51,7 @@ RUN cd /dependencies && \
     tar xvf boost_1_64_0.tar.gz
 RUN cd /dependencies/boost_1_64_0 && \
     ./bootstrap.sh --prefix=/usr/local #&& \
-    ./b2 --with=all -j 2 install
+    ./b2 --with=all -j ${CORES} install
 
 ## MyGUI
 RUN apt-get -y install libfreetype6-dev
@@ -61,7 +63,7 @@ RUN cd /dependencies && \
     mkdir build
 RUN cd /dependencies/mygui/build && \
     cmake -DMYGUI_RENDERSYSTEM=1 -DMYGUI_BUILD_DEMOS=OFF -DMYGUI_BUILD_TOOLS=OFF -DMYGUI_BUILD_PLUGINS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
-    make && \
+    make -j ${CORES} && \
     make install
 
 ## OpenSceneGraph
@@ -72,7 +74,7 @@ RUN cd /dependencies && \
     mkdir build
 RUN cd /dependencies/osg/build && \
     cmake -DBUILD_OSG_PLUGINS_BY_DEFAULT=0 -DBUILD_OSG_PLUGIN_OSG=1 -DBUILD_OSG_PLUGIN_DDS=1 -DBUILD_OSG_PLUGIN_TGA=1 -DBUILD_OSG_PLUGIN_BMP=1 -DBUILD_OSG_PLUGIN_JPEG=1 -DBUILD_OSG_PLUGIN_PNG=1 -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
-    make && \
+    make -j ${CORES} && \
     make install
 
 ## QT5
@@ -84,7 +86,7 @@ RUN cd /dependencies && \
     ./init-repository
 RUN cd /dependencies/qt5 && \
     yes | ./configure -opensource -nomake examples -nomake tests --prefix=/usr/local && \
-    make && \
+    make -j ${CORES} && \
     make install
 
 ## FFMPEG
@@ -94,10 +96,11 @@ RUN cd /dependencies && \
     git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg
 RUN cd /dependencies/ffmpeg && \
     ./configure --prefix=/usr/local --enable-shared --enable-gpl --enable-libvorbis --enable-libtheora --enable-libmp3lame --enable-libopus && \
-    make && \
+    make -j ${CORES} && \
     make install
 
 # TES3MP-deploy build and packaging script
+RUN apt-get -y lsb-release
 RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git build/
 
 # Remove build files
