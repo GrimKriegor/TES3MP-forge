@@ -100,7 +100,8 @@ RUN cd /dependencies/ffmpeg && \
     make install
 
 # TES3MP-deploy build and packaging script
-RUN apt-get -y lsb-release
+RUN apt-get -y install lsb-release unzip
+RUN apt-get -y install libopenal-dev libsdl2-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libunshield-dev libncurses5-dev 
 RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git build/
 
 # Remove build files
@@ -111,5 +112,5 @@ VOLUME [ "/build" ]
 
 # Declare entrypoint and default arguments
 WORKDIR /build
-ENTRYPOINT [ "su", "-c", "/build/tes3mp-deploy.sh", "--cmake-local" ]
-CMD [ "--install", "--make-package", "--skip-pkgs" ]
+ENTRYPOINT [ "su", "-c", "/build/tes3mp-deploy.sh", "--cmake-local", "--skip-pkgs" ]
+CMD [ "--install", "--make-package"]
