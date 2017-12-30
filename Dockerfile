@@ -111,8 +111,7 @@ RUN rm -rf /dependencies
 RUN apt-get -y install lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev && \
     apt-get -y build-dep bullet
 ENV BUILD_BULLET=true
-RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy && \
-    chmod 755 /deploy/tes3mp-deploy.sh
+RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy
 
 # Expose the build directory as a volume
 RUN mkdir /build
