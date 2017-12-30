@@ -11,19 +11,19 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 ARG CORES=1
 
 # Edit sources.list to include source and contrib repositories
-RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list
-RUN sed -i "s/ main/ main contrib/g" /etc/apt/sources.list
+RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list && \
+    sed -i "s/ main/ main contrib/g" /etc/apt/sources.list
 
 # Update package lists and install a few useful tools
-RUN apt-get update
-RUN apt-get -y install build-essential git wget
+RUN apt-get update && \
+    apt-get -y install build-essential git wget
 
 # Create a temporary folder where to build the dependencies
 RUN mkdir /dependencies
 
 ## GCC
-RUN apt-get -y install libgmp-dev libmpfr-dev libmpc-dev
-RUN apt-get -y build-dep gcc
+RUN apt-get -y install libgmp-dev libmpfr-dev libmpc-dev && \
+    apt-get -y build-dep gcc
 RUN cd /dependencies && \
     wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-6.4.0/gcc-6.4.0.tar.gz && \
     tar xvf gcc-6.4.0.tar.gz && \
@@ -46,8 +46,8 @@ RUN cd /dependencies && \
     rm -rf /dependencies/cmake
 
 ## Boost
-RUN apt-get -y install python-dev
-RUN apt-get -y build-dep libboost-all-dev
+RUN apt-get -y install python-dev && \
+    apt-get -y build-dep libboost-all-dev
 RUN cd /dependencies && \
     wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz && \
     tar xvf boost_1_64_0.tar.gz && \
@@ -57,8 +57,8 @@ RUN cd /dependencies && \
     rm -rf /dependencies/boost_1_64_0*
 
 ## MyGUI
-RUN apt-get -y install libfreetype6-dev
-RUN apt-get -y build-dep libmygui-dev
+RUN apt-get -y install libfreetype6-dev && \
+    apt-get -y build-dep libmygui-dev
 RUN cd /dependencies && \
     git clone https://github.com/MyGUI/mygui.git mygui && \
     cd mygui && \
@@ -108,11 +108,11 @@ RUN cd /dependencies && \
 RUN rm -rf /dependencies
 
 # TES3MP-deploy build and packaging script
-RUN apt-get -y install lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev 
-RUN apt-get -y build-dep bullet
+RUN apt-get -y install lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev && \
+    apt-get -y build-dep bullet
 ENV BUILD_BULLET=true
-RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy
-RUN chmod 755 /deploy/tes3mp-deploy.sh
+RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy && \
+    chmod 755 /deploy/tes3mp-deploy.sh
 
 # Expose the build directory as a volume
 RUN mkdir /build
