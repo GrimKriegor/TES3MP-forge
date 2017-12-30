@@ -90,8 +90,7 @@ RUN cd /dependencies/qt5 && \
     make install
 
 ## FFMPEG
-RUN build-dep ffmpeg
-RUN apt-get install yasm libmp3lame-dev libopus-dev
+RUN apt-get -y install libvorbis-dev libmp3lame-dev libopus-dev libtheora-dev libspeex-dev yasm pkg-config libopenjpeg-dev libx264-dev
 RUN cd /dependencies && \
     git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg
 RUN cd /dependencies/ffmpeg && \
@@ -99,18 +98,21 @@ RUN cd /dependencies/ffmpeg && \
     make -j ${CORES} && \
     make install
 
-# TES3MP-deploy build and packaging script
-RUN apt-get -y install lsb-release unzip
-RUN apt-get -y install libopenal-dev libsdl2-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libunshield-dev libncurses5-dev 
-RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git build/
-
 # Remove build files
 RUN rm -rf /dependencies
 
+# TES3MP-deploy build and packaging script
+RUN apt-get -y install lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev 
+RUN apt-get -y build-dep bullet
+ENV BUILD_BULLET=true
+RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy
+RUN chmod 755 /deploy/tes3mp-deploy.sh
+
 # Expose the build directory as a volume
+RUN mkdir /build
 VOLUME [ "/build" ]
 
 # Declare entrypoint and default arguments
 WORKDIR /build
-ENTRYPOINT [ "su", "-c", "/build/tes3mp-deploy.sh", "--cmake-local", "--skip-pkgs" ]
-CMD [ "--install", "--make-package"]
+ENTRYPOINT [ "/bin/bash", "/deploy/tes3mp-deploy.sh", "--script-upgrade", "--cmake-local", "--skip-pkgs" ]
+CMD [ "--install", "--make-package" ]
