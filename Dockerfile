@@ -45,12 +45,13 @@ RUN cd /dependencies/cmake && \
     make install
 
 ## Boost
+RUN apt-get -y install python-dev
 RUN apt-get -y build-dep libboost-all-dev
 RUN cd /dependencies && \
     wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz && \
     tar xvf boost_1_64_0.tar.gz
 RUN cd /dependencies/boost_1_64_0 && \
-    ./bootstrap.sh --prefix=/usr/local #&& \
+    ./bootstrap.sh --prefix=/usr/local && \
     ./b2 --with=all -j ${CORES} install
 
 ## MyGUI
