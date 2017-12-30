@@ -31,12 +31,12 @@ If no parameter is specified on Docker run or start, the default behaviour is to
 
 Might be a good idea to get a fresh copy of **libstdc++.so.6** from a recent system and drop it into the package **lib/** directory for increasced compatibility with older systems
 
-You can either inject it directly into the .tar.gz package or put it into **extras/lib/** and have it be included on all future package builds
+You can either inject it directly into the .tar.gz package or put it into **extra/lib/** and have it be included on all future package builds
 
-    mkdir -p <output-directory>/extras/lib
-    cp -r --preserve=links /usr/lib/libstdc++.so.6* <output-directory>/extras/lib/
+    mkdir -p <output-directory>/extra/lib
+    cp -r --preserve=links /usr/lib/libstdc++.so.6* <output-directory>/extra/lib/
 
 The same can be done with the **version** file, when you are building from hotfix commits but want to keep it compatible with the servers.
 
-    mkdir -p <output-directory>/extras/resources/
-    cp version <output-directory>/extras/resources/
+    mkdir -p <output-directory>/extra/resources/
+    cp version <output-directory>/extra/resources/
