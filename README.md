@@ -21,6 +21,6 @@ From source
 
 #### Usage
 
-     By default TES3MP-packager runs TES3MP-deploy with "--script-upgrade --cmake-local --skip-pkgs" which tells it to check for script upgrades via GitHub and use the build dependencies on /usr/local bundled with this image.
+By default TES3MP-packager runs TES3MP-deploy with "--script-upgrade --cmake-local --skip-pkgs" which tells it to check for script upgrades via GitHub and use the build dependencies on /usr/local bundled with this image.
 
-     If no parameter is specified on Docker run or start, the default behaviour is to install and package TES3MP.
+If no parameter is specified on Docker run or start, the default behaviour is to install and package TES3MP.
