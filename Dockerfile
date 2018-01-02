@@ -119,5 +119,5 @@ VOLUME [ "/build" ]
 
 # Declare entrypoint and default arguments
 WORKDIR /build
-ENTRYPOINT [ "/bin/bash", "/deploy/tes3mp-deploy.sh", "--script-upgrade", "--cmake-local", "--skip-pkgs" ]
+ENTRYPOINT [ "/bin/bash", "/deploy/tes3mp-deploy.sh", "--script-upgrade", "--cmake-local", "--skip-pkgs", "--handle-corescripts" ]
 CMD [ "--install", "--make-package" ]
