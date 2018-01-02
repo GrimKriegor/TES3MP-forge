@@ -113,6 +113,10 @@ RUN apt-get -y install lsb-release unzip libopenal-dev libsdl2-dev libunshield-d
 ENV BUILD_BULLET=true
 RUN git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy
 
+# Dummy git configuration
+RUN git config --global user.email "nwah@mail.com" && \
+    git config --global user.name "N'Wah"
+
 # Expose the build directory as a volume
 RUN mkdir /build
 VOLUME [ "/build" ]
