@@ -16,7 +16,7 @@ From source
 
     git clone https://github.com/GrimKriegor/TES3MP-forge.git
     cd TES3MP-forge
-    docker build --name "TES3MP-forge" --build-arg CORES=<build-threads> .
+    docker build --tag tes3mp-forge --build-arg CORES=<build-threads> .
     docker run -v <output-directory>:/build TES3MP-forge
 
 Replace **<output-directory>** with the path of the directory you want to build TES3MP on. The package will also be there.
