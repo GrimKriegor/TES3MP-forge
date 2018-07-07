@@ -18,7 +18,8 @@ RUN apt-get -y build-dep gcc \
     && ./configure --program-suffix=-6 --enable-languages=c,c++ --disable-multilib \
     && make -j ${CORES} \
     && make install \
-    && rm -rf /tmp/gcc-6.4.0*
+    && rm -rf /tmp/gcc-6.4.0* \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/local/bin/g++-6
 
 RUN apt-get -y build-dep cmake \
     && cd /tmp \
