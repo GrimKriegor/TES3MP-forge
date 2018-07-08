@@ -1,6 +1,6 @@
 FROM debian:jessie as builder
 
-ARG CORES=4
+ARG BUILD_THREADS=4
 
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
@@ -16,7 +16,7 @@ RUN apt-get -y build-dep gcc \
     && tar xvf gcc-6.4.0.tar.gz \
     && cd gcc-6.4.0 \
     && ./configure --program-suffix=-6 --enable-languages=c,c++ --disable-multilib \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/gcc-6.4.0* \
     && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 \
@@ -28,7 +28,7 @@ RUN apt-get -y build-dep cmake \
     && cd cmake \
     && git checkout tags/v3.5.2 \
     && ./configure --prefix=/usr/local \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/cmake
 
@@ -39,7 +39,7 @@ RUN apt-get -y build-dep libboost-all-dev \
     && tar xvf boost_1_64_0.tar.gz \
     && cd boost_1_64_0 \
     && ./bootstrap.sh --with-libraries=program_options,filesystem,system --prefix=/usr/local \
-    && ./b2 -j ${CORES} install \
+    && ./b2 -j ${BUILD_THREADS} install \
     && rm -rf /tmp/boost_1_64_0*
 
 RUN apt-get -y build-dep libmygui-dev \
@@ -53,7 +53,7 @@ RUN apt-get -y build-dep libmygui-dev \
     && cmake -DMYGUI_RENDERSYSTEM=1 -DMYGUI_BUILD_DEMOS=OFF \
         -DMYGUI_BUILD_TOOLS=OFF -DMYGUI_BUILD_PLUGINS=OFF \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/mygui
 
@@ -68,7 +68,7 @@ RUN apt-get -y build-dep libopenscenegraph-dev \
         -DBUILD_OSG_PLUGIN_BMP=1 -DBUILD_OSG_PLUGIN_JPEG=1 \
         -DBUILD_OSG_PLUGIN_PNG=1 -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/osg
 
@@ -83,7 +83,7 @@ RUN apt-get -y install libfontconfig1-dev libfreetype6-dev libx11-dev \
     && git checkout 5.5 \
     && ./init-repository \
     && yes | ./configure -opensource -nomake examples -nomake tests --prefix=/usr/local \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/qt5
 
@@ -95,7 +95,7 @@ RUN apt-get -y install libvorbis-dev libmp3lame-dev libopus-dev libtheora-dev \
     && ./configure --prefix=/usr/local --enable-shared --enable-gpl \
         --enable-libvorbis --enable-libtheora \
         --enable-libmp3lame --enable-libopus \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/ffmpeg
 
@@ -110,7 +110,7 @@ RUN apt-get -y build-dep bullet \
     && cmake -DBUILD_SHARED_LIBS=1 -DINSTALL_LIBS=1 \
         -DINSTALL_EXTRA_LIBS=1 -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-    && make -j ${CORES} \
+    && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/bullet
 
@@ -119,7 +119,8 @@ FROM debian:jessie
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
 LABEL description="A container to simplify the packaging of TES3MP for GNU/Linux"
 
-ARG CORES=4
+ARG BUILD_THREADS=4
+ENV BUILD_THREADS=${BUILD_THREADS}
 
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
