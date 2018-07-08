@@ -85,7 +85,7 @@ RUN apt-get -y install libvorbis-dev libmp3lame-dev libopus-dev libtheora-dev li
     && make install \
     && rm -rf /tmp/ffmpeg
 
-RUN apt-get build-dep bullet \
+RUN apt-get -y build-dep bullet \
     && cd /tmp \
     && git clone https://github.com/bulletphysics/bullet3.git bullet \
     && cd bullet \
@@ -110,7 +110,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 COPY --from=builder /usr/local /usr/local
 
-RUN apt-get update && apt-get -y install build-essential git wget lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev \
+RUN apt-get update && apt-get -y install build-essential git wget lsb-release unzip libopenal-dev libsdl2-dev libunshield-dev libncurses5-dev libluajit-5.1-dev libpng12-0 libopus0 libmp3lame0 libtheora0 libfreetype6 \
     && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/local/bin/g++-6
 
 RUN git config --global user.email "nwah@mail.com" && git config --global user.name "N'Wah" \
