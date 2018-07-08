@@ -38,8 +38,8 @@ RUN apt-get -y build-dep libboost-all-dev \
     && wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz \
     && tar xvf boost_1_64_0.tar.gz \
     && cd boost_1_64_0 \
-    && ./bootstrap.sh --prefix=/usr/local \
-    && ./b2 --with=all -j ${CORES} install \
+    && ./bootstrap.sh --with-libraries=program_options,filesystem,system --prefix=/usr/local \
+    && ./b2 -j ${CORES} install \
     && rm -rf /tmp/boost_1_64_0*
 
 RUN apt-get -y build-dep libmygui-dev \
