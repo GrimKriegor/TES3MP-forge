@@ -27,7 +27,7 @@ docker build --tag grimkriegor/tes3mp-forge --build-arg BUILD_THREADS=<build-thr
 ## Running
 
 ```bash
-docker run -v <output-directory>:/build grimkriegor/tes3mp-forge [<TES3MP-deploy arguments>]
+docker run --rm -it -v <output-directory>:/build grimkriegor/tes3mp-forge [TES3MP-deploy arguments]
 ```
 
 Replace **<output-directory>** with the path of the directory you want to build TES3MP on. The package will also be there.
