@@ -7,12 +7,14 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
     && sed -i "s/ main/ main contrib/g" /etc/apt/sources.list \
-    && apt-get update && apt-get -y install \
+    && apt-get update \
+    && apt-get -y install \
         build-essential \
         git \
         wget
 
-RUN apt-get -y build-dep gcc \
+RUN apt-get -y build-dep \
+        gcc \
     && apt-get -y install \
         libgmp-dev \
         libmpfr-dev \
@@ -28,21 +30,26 @@ RUN apt-get -y build-dep gcc \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/gcc-6.4.0* \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 \
+    && update-alternatives \
+        --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 \
         --slave /usr/bin/g++ g++ /usr/local/bin/g++-6
 
-RUN apt-get -y build-dep cmake \
+RUN apt-get -y build-dep \
+        cmake \
     && cd /tmp \
     && git clone https://github.com/Kitware/CMake.git cmake \
     && cd cmake \
     && git checkout tags/v3.5.2 \
-    && ./configure --prefix=/usr/local \
+    && ./configure \
+        --prefix=/usr/local \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/cmake
 
-RUN apt-get -y build-dep libboost-all-dev \
-    && apt-get -y install python-dev \
+RUN apt-get -y build-dep \
+        libboost-all-dev \
+    && apt-get -y install \
+        python-dev \
     && cd /tmp \
     && wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz \
     && tar xvf boost_1_64_0.tar.gz \
@@ -53,8 +60,10 @@ RUN apt-get -y build-dep libboost-all-dev \
     && ./b2 -j ${BUILD_THREADS} install \
     && rm -rf /tmp/boost_1_64_0*
 
-RUN apt-get -y build-dep libmygui-dev \
-    && apt-get -y install libfreetype6-dev \
+RUN apt-get -y build-dep \
+        libmygui-dev \
+    && apt-get -y install \
+        libfreetype6-dev \
     && cd /tmp \
     && git clone https://github.com/MyGUI/mygui.git mygui \
     && cd mygui \
@@ -71,7 +80,8 @@ RUN apt-get -y build-dep libmygui-dev \
     && make install \
     && rm -rf /tmp/mygui
 
-RUN apt-get -y build-dep libopenscenegraph-dev \
+RUN apt-get -y build-dep \
+        libopenscenegraph-dev \
     && cd /tmp \
     && git clone https://github.com/scrawl/osg.git \
     && cd osg \
@@ -150,7 +160,8 @@ RUN apt-get -y install \
     && make install \
     && rm -rf /tmp/ffmpeg
 
-RUN apt-get -y build-dep bullet \
+RUN apt-get -y build-dep \
+        bullet \
     && cd /tmp \
     && git clone https://github.com/bulletphysics/bullet3.git bullet \
     && cd bullet \
@@ -198,16 +209,17 @@ RUN apt-get update \
         libmp3lame0 \
         libtheora0 \
         libfreetype6 \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 \
+    && update-alternatives \
+        --install /usr/bin/gcc gcc /usr/local/bin/gcc-6 60 \
         --slave /usr/bin/g++ g++ /usr/local/bin/g++-6
 
 RUN git config --global user.email "nwah@mail.com" \
     && git config --global user.name "N'Wah" \
-    && git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy
+    && git clone https://github.com/GrimKriegor/TES3MP-deploy.git /deploy \
+    && mkdir /build
 
-RUN mkdir /build
 VOLUME [ "/build" ]
-
 WORKDIR /build
+
 ENTRYPOINT [ "/bin/bash", "/deploy/tes3mp-deploy.sh", "--script-upgrade", "--cmake-local", "--skip-pkgs", "--handle-corescripts" ]
 CMD [ "--install", "--make-package" ]
