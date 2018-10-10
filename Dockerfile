@@ -59,7 +59,7 @@ RUN apt-get -y build-dep libmygui-dev \
 
 RUN apt-get -y build-dep libopenscenegraph-dev \
     && cd /tmp \
-    && git clone https://github.com/scrawl/osg.git \
+    && git clone -b 3.4 https://github.com/OpenMW/osg.git \
     && cd osg \
     && mkdir build \
     && cd build \
