@@ -55,7 +55,7 @@ RUN apt-get -y build-dep \
     && tar xvf boost_1_64_0.tar.gz \
     && cd boost_1_64_0 \
     && ./bootstrap.sh \
-        --with-libraries=program_options,filesystem,system \
+        --with-libraries=program_options,filesystem,system,iostreams \
         --prefix=/usr/local \
     && ./b2 -j ${BUILD_THREADS} install \
     && rm -rf /tmp/boost_1_64_0*
