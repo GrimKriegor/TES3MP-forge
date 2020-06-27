@@ -1,4 +1,4 @@
-FROM debian:jessie as builder
+FROM debian:stretch as builder
 
 ARG BUILD_THREADS=4
 
@@ -179,7 +179,7 @@ RUN apt-get -y build-dep \
     && make install \
     && rm -rf /tmp/bullet
 
-FROM debian:jessie
+FROM debian:stretch
 
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
 LABEL description="A container to simplify the packaging of TES3MP for GNU/Linux"
