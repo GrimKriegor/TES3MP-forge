@@ -124,7 +124,7 @@ RUN apt-get -y install \
     && cd /tmp \
     && git clone git://code.qt.io/qt/qt5.git \
     && cd qt5 \
-    && git checkout 5.12 \
+    && git checkout 5.5 \
     && ./init-repository \
     && yes | ./configure \
         -opensource \
