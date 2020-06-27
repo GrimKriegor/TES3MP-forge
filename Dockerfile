@@ -143,7 +143,7 @@ RUN apt-get -y install \
         libspeex-dev \
         yasm \
         pkg-config \
-        libopenjpeg-dev \
+        libopenjp2-7-dev \
         libx264-dev \
     && cd /tmp \
     && git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg \
