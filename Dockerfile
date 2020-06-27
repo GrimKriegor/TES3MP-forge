@@ -13,26 +13,26 @@ RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list
         git \
         wget
 
-RUN apt-get -y build-dep \
-        gcc \
-    && apt-get -y install \
-        libgmp-dev \
-        libmpfr-dev \
-        libmpc-dev \
-    && cd /tmp \
-    && wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz \
-    && tar xvf gcc-8.3.0.tar.xz \
-    && cd gcc-8.3.0 \
-    && ./configure \
-        --program-suffix=-8 \
-        --enable-languages=c,c++ \
-        --disable-multilib \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/gcc-8.3.0* \
-    && update-alternatives \
-        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
+#RUN apt-get -y build-dep \
+#        gcc \
+#    && apt-get -y install \
+#        libgmp-dev \
+#        libmpfr-dev \
+#        libmpc-dev \
+#    && cd /tmp \
+#    && wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz \
+#    && tar xvf gcc-8.3.0.tar.xz \
+#    && cd gcc-8.3.0 \
+#    && ./configure \
+#        --program-suffix=-8 \
+#        --enable-languages=c,c++ \
+#        --disable-multilib \
+#    && make -j ${BUILD_THREADS} \
+#    && make install \
+#    && rm -rf /tmp/gcc-8.3.0* \
+#    && update-alternatives \
+#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
+#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
 
 RUN apt-get -y build-dep \
         cmake \
@@ -209,10 +209,10 @@ RUN apt-get update \
         libopus0 \
         libmp3lame0 \
         libtheora0 \
-        libfreetype6 \
-    && update-alternatives \
-        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
+        libfreetype6
+#    && update-alternatives \
+#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
+#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
 
 RUN git config --global user.email "nwah@mail.com" \
     && git config --global user.name "N'Wah" \
