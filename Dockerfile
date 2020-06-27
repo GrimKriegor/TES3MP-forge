@@ -204,7 +204,7 @@ RUN apt-get update \
         libunshield-dev \
         libncurses5-dev \
         libluajit-5.1-dev \
-        libpng12-0 \
+        libpng16-16 \
         libopus0 \
         libmp3lame0 \
         libtheora0 \
