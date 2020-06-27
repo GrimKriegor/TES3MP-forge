@@ -95,6 +95,7 @@ RUN apt-get -y build-dep \
         -DBUILD_OSG_PLUGIN_BMP=1 \
         -DBUILD_OSG_PLUGIN_JPEG=1 \
         -DBUILD_OSG_PLUGIN_PNG=1 \
+        -DBUILD_OSG_PLUGIN_SHADOW=1 \
         -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
     && make -j ${BUILD_THREADS} \
