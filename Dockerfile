@@ -17,16 +17,16 @@ RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list
 #        gcc \
 #    && apt-get -y install \
 #        libgmp-dev \
-#        libmpfr-dev \
 #        libmpc-dev \
+#        libmpfr-dev \
 #    && cd /tmp \
 #    && wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz \
 #    && tar xvf gcc-8.3.0.tar.xz \
 #    && cd gcc-8.3.0 \
 #    && ./configure \
-#        --program-suffix=-8 \
-#        --enable-languages=c,c++ \
 #        --disable-multilib \
+#        --enable-languages=c,c++ \
+#        --program-suffix=-8 \
 #    && make -j ${BUILD_THREADS} \
 #    && make install \
 #    && rm -rf /tmp/gcc-8.3.0* \
@@ -71,11 +71,11 @@ RUN apt-get -y build-dep \
     && mkdir build \
     && cd build \
     && cmake \
-        -DMYGUI_RENDERSYSTEM=1 \
-        -DMYGUI_BUILD_DEMOS=OFF \
-        -DMYGUI_BUILD_TOOLS=OFF \
-        -DMYGUI_BUILD_PLUGINS=OFF \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+        -DMYGUI_BUILD_DEMOS=OFF \
+        -DMYGUI_BUILD_PLUGINS=OFF \
+        -DMYGUI_BUILD_TOOLS=OFF \
+        -DMYGUI_RENDERSYSTEM=1 \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/mygui
@@ -88,15 +88,15 @@ RUN apt-get -y build-dep \
     && mkdir build \
     && cd build \
     && cmake \
+        -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
         -DBUILD_OSG_PLUGINS_BY_DEFAULT=0 \
-        -DBUILD_OSG_PLUGIN_OSG=1 \
-        -DBUILD_OSG_PLUGIN_DDS=1 \
-        -DBUILD_OSG_PLUGIN_TGA=1 \
         -DBUILD_OSG_PLUGIN_BMP=1 \
+        -DBUILD_OSG_PLUGIN_DDS=1 \
         -DBUILD_OSG_PLUGIN_JPEG=1 \
+        -DBUILD_OSG_PLUGIN_OSG=1 \
         -DBUILD_OSG_PLUGIN_PNG=1 \
         -DBUILD_OSG_PLUGIN_SHADOW=1 \
-        -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
+        -DBUILD_OSG_PLUGIN_TGA=1 \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
     && make -j ${BUILD_THREADS} \
     && make install \
@@ -106,57 +106,57 @@ RUN apt-get -y install \
         libfontconfig1-dev \
         libfreetype6-dev \
         libx11-dev \
+        libx11-xcb-dev \
+        libxcb-glx0-dev \
+        libxcb-icccm4-dev \
+        libxcb-image0-dev \
+        libxcb-keysyms1-dev \
+        libxcb-randr0-dev \
+        libxcb-render-util0-dev \
+        libxcb-shape0-dev \
+        libxcb-shm0-dev \
+        libxcb-sync0-dev \
+        libxcb-xfixes0-dev \
+        libxcb1-dev \
         libxext-dev \
         libxfixes-dev \
         libxi-dev \
         libxrender-dev \
-        libxcb1-dev \
-        libx11-xcb-dev \
-        libxcb-glx0-dev \
-        libxcb-keysyms1-dev \
-        libxcb-image0-dev \
-        libxcb-shm0-dev \
-        libxcb-icccm4-dev \
-        libxcb-sync0-dev \
-        libxcb-xfixes0-dev \
-        libxcb-shape0-dev \
-        libxcb-randr0-dev \
-        libxcb-render-util0-dev \
     && cd /tmp \
     && git clone git://code.qt.io/qt/qt5.git \
     && cd qt5 \
     && git checkout 5.5 \
     && ./init-repository \
     && yes | ./configure \
-        -opensource \
+        --prefix=/usr/local \
         -nomake examples \
         -nomake tests \
-        --prefix=/usr/local \
+        -opensource \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/qt5
 
 RUN apt-get -y install \
-        libvorbis-dev \
         libmp3lame-dev \
-        libopus-dev \
-        libtheora-dev \
-        libspeex-dev \
-        yasm \
-        pkg-config \
         libopenjp2-7-dev \
+        libopus-dev \
+        libspeex-dev \
+        libtheora-dev \
+        libvorbis-dev \
         libx264-dev \
+        pkg-config \
+        yasm \
     && cd /tmp \
     && git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg \
     && cd ffmpeg \
     && ./configure \
-        --prefix=/usr/local \
-        --enable-shared \
         --enable-gpl \
-        --enable-libvorbis \
-        --enable-libtheora \
         --enable-libmp3lame \
         --enable-libopus \
+        --enable-libtheora \
+        --enable-libvorbis \
+        --enable-shared \
+        --prefix=/usr/local \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/ffmpeg
@@ -172,10 +172,10 @@ RUN apt-get -y build-dep \
     && cd build \
     && cmake \
         -DBUILD_SHARED_LIBS=1 \
-        -DINSTALL_LIBS=1 \
-        -DINSTALL_EXTRA_LIBS=1 \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+        -DINSTALL_EXTRA_LIBS=1 \
+        -DINSTALL_LIBS=1 \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/bullet
@@ -197,19 +197,19 @@ RUN apt-get update \
     && apt-get -y install \
         build-essential \
         git \
-        wget \
+        libfreetype6 \
+        libluajit-5.1-dev \
+        libmp3lame0 \
+        libncurses5-dev \
+        libopenal-dev \
+        libopus0 \
+        libpng16-16 \
+        libsdl2-dev \
+        libtheora0 \
+        libunshield-dev \
         lsb-release \
         unzip \
-        libopenal-dev \
-        libsdl2-dev \
-        libunshield-dev \
-        libncurses5-dev \
-        libluajit-5.1-dev \
-        libpng16-16 \
-        libopus0 \
-        libmp3lame0 \
-        libtheora0 \
-        libfreetype6
+        wget
 #    && update-alternatives \
 #        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
 #        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
