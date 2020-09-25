@@ -2,7 +2,7 @@
 
 A container to simplify the packaging of TES3MP for GNU/Linux
 
-This Docker image creates a Debian Jessie build environment, compiles a bunch of dependencies with parameters as such to make the resulting TES3MP GNU/Linux package work on most distros and finally summons [TES3MP-deploy](https://github.com/GrimKriegor/TES3MP-deploy) to build and package TES3MP automatically.
+This Docker image creates a Debian Stretch build environment, compiles a bunch of dependencies with parameters to make the resulting TES3MP GNU/Linux package work on most distros, and finally summons [TES3MP-deploy](https://github.com/GrimKriegor/TES3MP-deploy) to build and package TES3MP automatically.
 
 [ARM version](https://github.com/GrimKriegor/TES3MP-forge-armhf)
 
