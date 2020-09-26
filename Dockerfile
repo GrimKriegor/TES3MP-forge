@@ -217,7 +217,7 @@ RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sou
         libunshield-dev \
         lsb-release \
         unzip \
-        wget 
+        wget
 #    && update-alternatives \
 #        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
 #        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
