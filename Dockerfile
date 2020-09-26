@@ -5,7 +5,8 @@ ARG BUILD_THREADS=4
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
-RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
+RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
+    && cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
     && sed -i "s/ main/ main contrib/g" /etc/apt/sources.list \
     && apt-get update \
     && apt-get -y install \
@@ -81,7 +82,7 @@ RUN apt-get -y build-dep \
     && rm -rf /tmp/mygui
 
 RUN apt-get -y build-dep \
-        libopenscenegraph-dev \
+        libopenscenegraph-3.4-dev \
     && cd /tmp \
     && git clone -b 3.4 https://github.com/OpenMW/osg.git \
     && cd osg \
@@ -121,7 +122,7 @@ RUN apt-get -y install \
         libxext-dev \
         libxfixes-dev \
         libxi-dev \
-        libxrender-dev \
+        libxrender-dev
 #    && cd /tmp \
 #    && git clone git://code.qt.io/qt/qt5.git \
 #    && cd qt5 \
@@ -193,7 +194,8 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 COPY --from=builder /usr/local /usr/local
 
-RUN apt-get update \
+RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
+    && apt-get update \
     && apt-get -y install \
         build-essential \
         git \
@@ -201,7 +203,7 @@ RUN apt-get update \
         qt5-default \
         qtbase5-dev \
         qtbase5-dev-tools \
-        libbullet-dev \
+        libbullet-dev/stretch-backports \
         libfreetype6 \
         libluajit-5.1-dev \
         libmp3lame0 \
@@ -215,7 +217,7 @@ RUN apt-get update \
         libunshield-dev \
         lsb-release \
         unzip \
-        wget
+        wget 
 #    && update-alternatives \
 #        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
 #        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
