@@ -14,39 +14,6 @@ RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sou
         git \
         wget
 
-#RUN apt-get -y build-dep \
-#        gcc \
-#    && apt-get -y install \
-#        libgmp-dev \
-#        libmpc-dev \
-#        libmpfr-dev \
-#    && cd /tmp \
-#    && wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz \
-#    && tar xvf gcc-8.3.0.tar.xz \
-#    && cd gcc-8.3.0 \
-#    && ./configure \
-#        --disable-multilib \
-#        --enable-languages=c,c++ \
-#        --program-suffix=-8 \
-#    && make -j ${BUILD_THREADS} \
-#    && make install \
-#    && rm -rf /tmp/gcc-8.3.0* \
-#    && update-alternatives \
-#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
-
-#RUN apt-get -y build-dep \
-#        cmake \
-#    && cd /tmp \
-#    && git clone https://github.com/Kitware/CMake.git cmake \
-#    && cd cmake \
-#    && git checkout tags/v3.5.2 \
-#    && ./configure \
-#        --prefix=/usr/local \
-#    && make -j ${BUILD_THREADS} \
-#    && make install \
-#    && rm -rf /tmp/cmake
-
 RUN apt-get -y build-dep \
         libboost-all-dev \
     && apt-get -y install \
@@ -104,40 +71,6 @@ RUN apt-get -y build-dep \
     && rm -rf /tmp/osg
 
 RUN apt-get -y install \
-        libfontconfig1-dev \
-        libfreetype6-dev \
-        libx11-dev \
-        libx11-xcb-dev \
-        libxcb-glx0-dev \
-        libxcb-icccm4-dev \
-        libxcb-image0-dev \
-        libxcb-keysyms1-dev \
-        libxcb-randr0-dev \
-        libxcb-render-util0-dev \
-        libxcb-shape0-dev \
-        libxcb-shm0-dev \
-        libxcb-sync0-dev \
-        libxcb-xfixes0-dev \
-        libxcb1-dev \
-        libxext-dev \
-        libxfixes-dev \
-        libxi-dev \
-        libxrender-dev
-#    && cd /tmp \
-#    && git clone git://code.qt.io/qt/qt5.git \
-#    && cd qt5 \
-#    && git checkout 5.5 \
-#    && ./init-repository \
-#    && yes | ./configure \
-#        --prefix=/usr/local \
-#        -nomake examples \
-#        -nomake tests \
-#        -opensource \
-#    && make -j ${BUILD_THREADS} \
-#    && make install \
-#    && rm -rf /tmp/qt5
-
-RUN apt-get -y install \
         libmp3lame-dev \
         libopenjp2-7-dev \
         libopus-dev \
@@ -161,25 +94,6 @@ RUN apt-get -y install \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/ffmpeg
-
-#RUN apt-get -y build-dep \
-#        bullet \
-#    && cd /tmp \
-#    && git clone https://github.com/bulletphysics/bullet3.git bullet \
-#    && cd bullet \
-#    && git checkout tags/2.86 \
-#    && rm -f CMakeCache.txt \
-#    && mkdir build \
-#    && cd build \
-#    && cmake \
-#        -DBUILD_SHARED_LIBS=1 \
-#        -DCMAKE_BUILD_TYPE=Release \
-#        -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-#        -DINSTALL_EXTRA_LIBS=1 \
-#        -DINSTALL_LIBS=1 \
-#    && make -j ${BUILD_THREADS} \
-#    && make install \
-#    && rm -rf /tmp/bullet
 
 FROM debian:stretch
 
@@ -218,9 +132,6 @@ RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sou
         lsb-release \
         unzip \
         wget
-#    && update-alternatives \
-#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
 
 RUN git config --global user.email "nwah@mail.com" \
     && git config --global user.name "N'Wah" \
