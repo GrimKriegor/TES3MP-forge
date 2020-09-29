@@ -5,7 +5,8 @@ ARG BUILD_THREADS=4
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
-RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
+RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
+    && cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
     && sed -i "s/ main/ main contrib/g" /etc/apt/sources.list \
     && apt-get update \
     && apt-get -y install \
@@ -13,52 +14,19 @@ RUN cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list
         git \
         wget
 
-#RUN apt-get -y build-dep \
-#        gcc \
-#    && apt-get -y install \
-#        libgmp-dev \
-#        libmpc-dev \
-#        libmpfr-dev \
-#    && cd /tmp \
-#    && wget ftp://ftp.uvsq.fr/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz \
-#    && tar xvf gcc-8.3.0.tar.xz \
-#    && cd gcc-8.3.0 \
-#    && ./configure \
-#        --disable-multilib \
-#        --enable-languages=c,c++ \
-#        --program-suffix=-8 \
-#    && make -j ${BUILD_THREADS} \
-#    && make install \
-#    && rm -rf /tmp/gcc-8.3.0* \
-#    && update-alternatives \
-#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
-
-RUN apt-get -y build-dep \
-        cmake \
-    && cd /tmp \
-    && git clone https://github.com/Kitware/CMake.git cmake \
-    && cd cmake \
-    && git checkout tags/v3.5.2 \
-    && ./configure \
-        --prefix=/usr/local \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/cmake
-
 RUN apt-get -y build-dep \
         libboost-all-dev \
     && apt-get -y install \
-        python-dev \
+        python3-dev \
     && cd /tmp \
-    && wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz \
-    && tar xvf boost_1_64_0.tar.gz \
-    && cd boost_1_64_0 \
+    && wget https://dl.bintray.com/boostorg/release/1.65.0/source/boost_1_65_0.tar.gz \
+    && tar xvf boost_1_65_0.tar.gz \
+    && cd boost_1_65_0 \
     && ./bootstrap.sh \
         --with-libraries=program_options,filesystem,system,iostreams \
         --prefix=/usr/local \
     && ./b2 -j ${BUILD_THREADS} install \
-    && rm -rf /tmp/boost_1_64_0*
+    && rm -rf /tmp/boost_1_65_0*
 
 RUN apt-get -y build-dep \
         libmygui-dev \
@@ -81,7 +49,7 @@ RUN apt-get -y build-dep \
     && rm -rf /tmp/mygui
 
 RUN apt-get -y build-dep \
-        libopenscenegraph-dev \
+        libopenscenegraph-3.4-dev \
     && cd /tmp \
     && git clone -b 3.4 https://github.com/OpenMW/osg.git \
     && cd osg \
@@ -101,40 +69,6 @@ RUN apt-get -y build-dep \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/osg
-
-RUN apt-get -y install \
-        libfontconfig1-dev \
-        libfreetype6-dev \
-        libx11-dev \
-        libx11-xcb-dev \
-        libxcb-glx0-dev \
-        libxcb-icccm4-dev \
-        libxcb-image0-dev \
-        libxcb-keysyms1-dev \
-        libxcb-randr0-dev \
-        libxcb-render-util0-dev \
-        libxcb-shape0-dev \
-        libxcb-shm0-dev \
-        libxcb-sync0-dev \
-        libxcb-xfixes0-dev \
-        libxcb1-dev \
-        libxext-dev \
-        libxfixes-dev \
-        libxi-dev \
-        libxrender-dev \
-    && cd /tmp \
-    && git clone git://code.qt.io/qt/qt5.git \
-    && cd qt5 \
-    && git checkout 5.5 \
-    && ./init-repository \
-    && yes | ./configure \
-        --prefix=/usr/local \
-        -nomake examples \
-        -nomake tests \
-        -opensource \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/qt5
 
 RUN apt-get -y install \
         libmp3lame-dev \
@@ -161,25 +95,6 @@ RUN apt-get -y install \
     && make install \
     && rm -rf /tmp/ffmpeg
 
-RUN apt-get -y build-dep \
-        bullet \
-    && cd /tmp \
-    && git clone https://github.com/bulletphysics/bullet3.git bullet \
-    && cd bullet \
-    && git checkout tags/2.86 \
-    && rm -f CMakeCache.txt \
-    && mkdir build \
-    && cd build \
-    && cmake \
-        -DBUILD_SHARED_LIBS=1 \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-        -DINSTALL_EXTRA_LIBS=1 \
-        -DINSTALL_LIBS=1 \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/bullet
-
 FROM debian:stretch
 
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
@@ -193,10 +108,16 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 COPY --from=builder /usr/local /usr/local
 
-RUN apt-get update \
+RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
+    && apt-get update \
     && apt-get -y install \
         build-essential \
         git \
+        cmake \
+        qt5-default \
+        qtbase5-dev \
+        qtbase5-dev-tools \
+        libbullet-dev/stretch-backports \
         libfreetype6 \
         libluajit-5.1-dev \
         libmp3lame0 \
@@ -204,15 +125,13 @@ RUN apt-get update \
         libopenal-dev \
         libopus0 \
         libpng16-16 \
+        libqt5opengl5-dev \
         libsdl2-dev \
         libtheora0 \
         libunshield-dev \
         lsb-release \
         unzip \
         wget
-#    && update-alternatives \
-#        --install /usr/bin/gcc gcc /usr/local/bin/gcc-8 80 \
-#        --slave /usr/bin/g++ g++ /usr/local/bin/g++-8
 
 RUN git config --global user.email "nwah@mail.com" \
     && git config --global user.name "N'Wah" \
