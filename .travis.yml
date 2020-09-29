@@ -1,0 +1,16 @@
+sudo: required
+services:
+  - docker
+language: bash
+script:
+  - docker build -t grimkriegor/tes3mp-forge .
+  - >
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      docker login -u="$DOCKERHUB_USER" -p="$DOCKERHUB_PASS"
+      TAG=$(grep "ENV FORGE_VERSION .*" Dockerfile | awk 'NF>1{print $NF}')
+      docker tag grimkriegor/tes3mp-forge grimkriegor/tes3mp-forge:$TAG
+      docker push grimkriegor/tes3mp-forge:$TAG
+      if [ "$TRAVIS_BRANCH" == "master" ]; then
+        docker push grimkriegor/tes3mp-forge
+      fi
+    fi

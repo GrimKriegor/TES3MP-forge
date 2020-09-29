@@ -1,5 +1,7 @@
 FROM debian:stretch as builder
 
+ENV FORGE_VERSION 2.1.0
+
 ARG BUILD_THREADS=4
 
 ENV PATH=/usr/local/bin:$PATH
@@ -20,7 +22,7 @@ RUN apt-get -y build-dep \
         python3-dev \
     && cd /tmp \
     && wget https://dl.bintray.com/boostorg/release/1.65.0/source/boost_1_65_0.tar.gz \
-    && tar xvf boost_1_65_0.tar.gz \
+    && tar xf boost_1_65_0.tar.gz \
     && cd boost_1_65_0 \
     && ./bootstrap.sh \
         --with-libraries=program_options,filesystem,system,iostreams \
