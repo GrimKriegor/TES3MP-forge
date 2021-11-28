@@ -21,7 +21,7 @@ RUN apt-get -y build-dep \
     && apt-get -y install \
         python3-dev \
     && cd /tmp \
-    && wget https://dl.bintray.com/boostorg/release/1.65.0/source/boost_1_65_0.tar.gz \
+    && wget https://boostorg.jfrog.io/artifactory/main/release/1.65.0/source/boost_1_65_0.tar.gz \
     && tar xf boost_1_65_0.tar.gz \
     && cd boost_1_65_0 \
     && ./bootstrap.sh \
