@@ -134,11 +134,8 @@ COPY --from=builder /usr/local /usr/local
 RUN apt-get update \
     && apt-get -y install \
         build-essential \
-        git \
         cmake \
-        qt5-default \
-        qtbase5-dev \
-        qtbase5-dev-tools \
+        git \
         libfreetype6 \
         libluajit-5.1-dev \
         libmp3lame0 \
@@ -151,6 +148,10 @@ RUN apt-get update \
         libtheora0 \
         libunshield-dev \
         lsb-release \
+        liblz4-dev \
+        qt5-default \
+        qtbase5-dev \
+        qtbase5-dev-tools \
         unzip \
         wget
 
