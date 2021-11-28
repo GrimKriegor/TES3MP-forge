@@ -97,6 +97,27 @@ RUN apt-get -y install \
     && make install \
     && rm -rf /tmp/ffmpeg
 
+RUN cd /tmp \
+    && git clone https://github.com/bulletphysics/bullet3.git bullet \
+    && cd bullet \
+    && mkdir build \
+    && cd build \
+    && git checkout tags/2.87 \
+    && cmake \
+        -DBUILD_SHARED_LIBS=1 \
+        -DINSTALL_LIBS=1 \
+        -DINSTALL_EXTRA_LIBS=1 \
+        -DUSE_DOUBLE_PRECISION=1 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_CPU_DEMOS=0 \
+        -DBUILD_BULLET2_DEMOS=0 \
+        -DBUILD_OPENGL3_DEMOS=0 \
+        -DBUILD_UNIT_TESTS=0 \
+        -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+    && make -j ${BUILD_THREADS} \
+    && make install \
+    && rm -rf /tmp/bullet
+
 FROM debian:stretch
 
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
@@ -110,8 +131,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 COPY --from=builder /usr/local /usr/local
 
-RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
-    && apt-get update \
+RUN apt-get update \
     && apt-get -y install \
         build-essential \
         git \
@@ -119,7 +139,6 @@ RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sou
         qt5-default \
         qtbase5-dev \
         qtbase5-dev-tools \
-        libbullet-dev/stretch-backports \
         libfreetype6 \
         libluajit-5.1-dev \
         libmp3lame0 \
