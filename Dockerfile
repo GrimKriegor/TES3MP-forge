@@ -1,4 +1,4 @@
-FROM debian:stretch as builder
+FROM debian:buster as builder
 
 ENV FORGE_VERSION 2.1.0
 
@@ -7,7 +7,7 @@ ARG BUILD_THREADS=4
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
-RUN echo deb http://deb.debian.org/debian stretch-backports main >> /etc/apt/sources.list \
+RUN echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sources.list \
     && cat /etc/apt/sources.list | sed "s/deb /deb-src /g" >> /etc/apt/sources.list \
     && sed -i "s/ main/ main contrib/g" /etc/apt/sources.list \
     && apt-get update \
@@ -118,7 +118,7 @@ RUN cd /tmp \
     && make install \
     && rm -rf /tmp/bullet
 
-FROM debian:stretch
+FROM debian:buster
 
 LABEL maintainer="Grim Kriegor <grimkriegor@krutt.org>"
 LABEL description="A container to simplify the packaging of TES3MP for GNU/Linux"
