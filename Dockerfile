@@ -72,31 +72,6 @@ RUN apt-get -y build-dep \
     && make install \
     && rm -rf /tmp/osg
 
-RUN apt-get -y install \
-        libmp3lame-dev \
-        libopenjp2-7-dev \
-        libopus-dev \
-        libspeex-dev \
-        libtheora-dev \
-        libvorbis-dev \
-        libx264-dev \
-        pkg-config \
-        yasm \
-    && cd /tmp \
-    && git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg \
-    && cd ffmpeg \
-    && ./configure \
-        --enable-gpl \
-        --enable-libmp3lame \
-        --enable-libopus \
-        --enable-libtheora \
-        --enable-libvorbis \
-        --enable-shared \
-        --prefix=/usr/local \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/ffmpeg
-
 RUN cd /tmp \
     && git clone https://github.com/bulletphysics/bullet3.git bullet \
     && cd bullet \
@@ -136,6 +111,10 @@ RUN apt-get update \
         build-essential \
         cmake \
         git \
+        libavcodec-dev \
+        libavformat-dev \
+        libavutil-dev \
+        libswscale-dev \
         libfreetype6 \
         libluajit-5.1-dev \
         libmp3lame0 \
