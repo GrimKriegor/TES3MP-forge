@@ -50,28 +50,6 @@ RUN apt-get -y build-dep \
     && make install \
     && rm -rf /tmp/mygui
 
-RUN apt-get -y build-dep \
-        libopenscenegraph-3.4-dev \
-    && cd /tmp \
-    && git clone -b 3.4 https://github.com/OpenMW/osg.git \
-    && cd osg \
-    && mkdir build \
-    && cd build \
-    && cmake \
-        -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
-        -DBUILD_OSG_PLUGINS_BY_DEFAULT=0 \
-        -DBUILD_OSG_PLUGIN_BMP=1 \
-        -DBUILD_OSG_PLUGIN_DDS=1 \
-        -DBUILD_OSG_PLUGIN_JPEG=1 \
-        -DBUILD_OSG_PLUGIN_OSG=1 \
-        -DBUILD_OSG_PLUGIN_PNG=1 \
-        -DBUILD_OSG_PLUGIN_SHADOW=1 \
-        -DBUILD_OSG_PLUGIN_TGA=1 \
-        -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-    && make -j ${BUILD_THREADS} \
-    && make install \
-    && rm -rf /tmp/osg
-
 RUN cd /tmp \
     && git clone https://github.com/bulletphysics/bullet3.git bullet \
     && cd bullet \
@@ -92,6 +70,28 @@ RUN cd /tmp \
     && make -j ${BUILD_THREADS} \
     && make install \
     && rm -rf /tmp/bullet
+
+RUN apt-get -y build-dep \
+        libopenscenegraph-3.4-dev \
+    && cd /tmp \
+    && git clone -b 3.6 https://github.com/OpenMW/osg.git \
+    && cd osg \
+    && mkdir build \
+    && cd build \
+    && cmake \
+        -DBUILD_OSG_DEPRECATED_SERIALIZERS=0 \
+        -DBUILD_OSG_PLUGINS_BY_DEFAULT=0 \
+        -DBUILD_OSG_PLUGIN_BMP=1 \
+        -DBUILD_OSG_PLUGIN_DDS=1 \
+        -DBUILD_OSG_PLUGIN_JPEG=1 \
+        -DBUILD_OSG_PLUGIN_OSG=1 \
+        -DBUILD_OSG_PLUGIN_PNG=1 \
+        -DBUILD_OSG_PLUGIN_SHADOW=1 \
+        -DBUILD_OSG_PLUGIN_TGA=1 \
+        -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+    && make -j ${BUILD_THREADS} \
+    && make install \
+    && rm -rf /tmp/osg
 
 FROM debian:buster
 
