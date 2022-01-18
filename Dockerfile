@@ -17,20 +17,6 @@ RUN echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sour
         wget
 
 RUN apt-get -y build-dep \
-        libboost-all-dev \
-    && apt-get -y install \
-        python3-dev \
-    && cd /tmp \
-    && wget https://boostorg.jfrog.io/artifactory/main/release/1.65.0/source/boost_1_65_0.tar.gz \
-    && tar xf boost_1_65_0.tar.gz \
-    && cd boost_1_65_0 \
-    && ./bootstrap.sh \
-        --with-libraries=program_options,filesystem,system,iostreams \
-        --prefix=/usr/local \
-    && ./b2 -j ${BUILD_THREADS} install \
-    && rm -rf /tmp/boost_1_65_0*
-
-RUN apt-get -y build-dep \
         libmygui-dev \
     && apt-get -y install \
         libfreetype6-dev \
@@ -114,9 +100,10 @@ RUN apt-get update \
         libavcodec-dev \
         libavformat-dev \
         libavutil-dev \
-        libswscale-dev \
+        libboost-all-dev \
         libfreetype6 \
         libluajit-5.1-dev \
+        liblz4-dev \
         libmp3lame0 \
         libncurses5-dev \
         libopenal-dev \
@@ -124,10 +111,10 @@ RUN apt-get update \
         libpng16-16 \
         libqt5opengl5-dev \
         libsdl2-dev \
+        libswscale-dev \
         libtheora0 \
         libunshield-dev \
         lsb-release \
-        liblz4-dev \
         qt5-default \
         qtbase5-dev \
         qtbase5-dev-tools \
