@@ -47,6 +47,7 @@ RUN cd /tmp \
         -DINSTALL_LIBS=1 \
         -DINSTALL_EXTRA_LIBS=1 \
         -DUSE_DOUBLE_PRECISION=1 \
+        -DBULLET2_MULTITHREADING=1 \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_CPU_DEMOS=0 \
         -DBUILD_BULLET2_DEMOS=0 \
