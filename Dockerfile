@@ -1,6 +1,6 @@
 FROM debian:buster as builder
 
-ENV FORGE_VERSION 2.3.1
+ENV FORGE_VERSION 2.4.0
 
 ARG BUILD_THREADS=4
 
