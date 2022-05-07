@@ -13,6 +13,7 @@ RUN echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sour
     && apt-get update \
     && apt-get -y install \
         build-essential \
+        cmake/buster-backports \
         git \
         wget
 
@@ -93,10 +94,11 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 
 COPY --from=builder /usr/local /usr/local
 
-RUN apt-get update \
+RUN echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sources.list \
+    && apt-get update \
     && apt-get -y install \
         build-essential \
-        cmake \
+        cmake/buster-backports \
         git \
         libavcodec-dev \
         libavformat-dev \
